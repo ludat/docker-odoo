@@ -1,11 +1,7 @@
+#I stole this from [xcgd](https://bitbucket.org/xcgd/odoo) and this is the default README... it's late I'll end this later
+
 A dockerfile for Odoo 7 & 8 & 9alpha
 ====================================
-
-!!!Latest changes!!!
-====================
-This image has just been "applified" and now behaves just like a binary application with several options.
-Try running ```docker run --rm xcgd/odoo``` and see what happens :)
-Check the BitBucket project page for contributing and discussing.
 
 Odoo version
 ============
