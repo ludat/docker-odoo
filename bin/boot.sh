@@ -8,7 +8,7 @@ set -eo pipefail
 
 function help {
     set +e
-    cat bin/help.txt
+    cat /bin/help.txt
     set -e
 }
 
@@ -30,10 +30,11 @@ function start {
     if [ ! -e $1 ]; then
         echo "...with additional args: $*"
     fi
+    chown odoo:odoo /etc/odoo.conf
     sudo -i -u odoo /usr/bin/python \
-                    /opt/odoo/sources/odoo/openerp-server \
-                    -c /opt/odoo/etc/odoo.conf \
-                    $*
+                    /opt/odoo/openerp-server \
+                    -c /etc/odoo.conf \
+                    $* &
 
     SERVICE_PID=$!
     set -e
@@ -48,6 +49,8 @@ function on_exit() {
 trap on_exit INT TERM
 
 echo "Running command..."
+id
+pwd
 for arg in "$*"
 do
     $arg

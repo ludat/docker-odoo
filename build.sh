@@ -1,3 +1,2 @@
 #!/bin/bash
-docker build --rm -t xcgd/odoo .
-
+docker build -t odoo .
