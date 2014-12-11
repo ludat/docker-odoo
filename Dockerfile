@@ -1,4 +1,4 @@
-FROM odoo-base
+FROM ludat/odoo-base:8.0
 MAINTAINER lucas6246@gmail.com
 
 # changing user is required by openerp which won't start with root
