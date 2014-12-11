@@ -30,10 +30,16 @@ function start {
     if [ ! -e $1 ]; then
         echo "...with additional args: $*"
     fi
+
+    CONFIG_FILE="/etc/odoo-default.conf"
+    if [ -f "/etc/odoo.conf" ]; then
+        CONFIG_FILE="/etc/odoo.conf"
+    fi
+
     chown odoo:odoo /etc/odoo.conf
     sudo -i -u odoo /usr/bin/python \
                     /opt/odoo/openerp-server \
-                    -c /etc/odoo.conf \
+                    -c $CONFIG_FILE \
                     $* &
 
     SERVICE_PID=$!
