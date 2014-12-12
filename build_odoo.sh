@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t odoo .
+docker build -t ludat/odoo .
