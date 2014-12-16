@@ -1,62 +1,70 @@
-#I stole this from [xcgd](https://bitbucket.org/xcgd/odoo) and this is the default README... it's late I'll end this later
+I stole this from [xcgd](https://bitbucket.org/xcgd/odoo) and modified it to suit my needs
 
-A dockerfile for Odoo 7 & 8 & 9alpha
-====================================
+A dockerfile for Odoo 8.0
+=========================
+
+Arquitecture
+------------
+
+My goal is to have everything separated so it's easier to debug if something breaks ideally I'd just replace only that part. So I have three images:
+
+* **postgres**: This image is just [the official postgres image](https://registry.hub.docker.com/_/postgres/) with some minimal customization in [run_posgres.sh](https://github.com/ludat/docker-odoo/blob/master/run_postgres.sh)
+* **odoo-base**: This image is build with the [base Dockerfile](https://github.com/ludat/docker-odoo/blob/master/base/Dockerfile) and it's propouse is just to serve all the dependencies that the specific version of odoo might require, create the odoo user and **nothing more** (this image should be in the docker hub and once it runs it should **not** be touched )
+* **odoo**: This image should be build by the user. It's based on odoo-base And it's job is:
+    * Download necesary files (configuration files, odoo itself, etc.)
+    * Add the boot.sh which serves as an init script.
+    * Expose ports
+    * Create volumes
+    This image **won't be** in the Docker hub just for now.
 
 Odoo version
-============
+------------
 
-This docker builds with a specific version of odoo (formerly OpenERP) . We manually pin revisions our team has validated.
-This is important to do in this way (as opposed to nightly builds) because we want to ensure reliability.
-Here are the current revisions from https://github.com/odoo/odoo for each docker tag
-
-    # production grade
-    xcgd/odoo:7.0	aa10972d13eeb2414bcfb0a0c402ef49573e1756 (branch 7.0)
-    xcgd/odoo:8.0	35431de125a73a79f574dddb60409131179c01b5 (branch 8.0)
-
-    # playing only
-    xcgd/odoo:latest	b1e9363b6629d1f11a60f414dba0df105a21485f (branch master/9alpha)
+As of today I only support Odoo 8.0 and probably will never go lower than that. But if a new version comes out you should not thrust the ludat/odoo-base:latest instead use the propper version number (ludat/odoo-base:8.0)
 
 Prerequisites
 =============
 
-xcgd/postgresql
+postgresql
 ---------------
 
-you'll need [xcgd/postgresql][1] docker image or any other PostgreSQL image of your choice that you link with odoo under the name `db`:
+The postgres image **must** be running to start Odoo. Just execute `run_postgres.sh` and it will pull the image from docker hub if it needs to (it uses postgres:9 which should be the latest for a while).
 
-    $ docker run --name="pg93" xcgd/postgresql
+When it runs the script does some things:
+* Asigns it a name (´pg´ by default): to be linked later to the odoo container.
+* Set the values for enviroment variables `POSTGRES_USER` and `POSTGRES_PASSWORD` (which default to `odoo` and `password` respectively): This are used to create a default user and password for the database which **MUST** be the same as those on the odoo.conf.
+* [OPTIONALLY] Adds a non-volatile volume so your data gets stored on the hosts file system
 
-Note: read the instructions on how to use this image with data persistance.
+**YOU SHOULD CHANGE THE DEFAULT PASSWORD TO SOMETHING ELSE**
 
-Start Odoo
+The _real_ documentation can be found on [the docker page of postgres](https://registry.hub.docker.com/_/postgres/)
+
+Build Odoo
 ----------
 
-Run odoo version 7.0, assuming you named your PostgreSQL container ``pg93`` as we did above:
+The odoo image derives from the ludat/odoo-base image (which should contain all the needed dependencies). The build process does the following things:
 
-    $ docker run -p 8069:8069 --rm --name="xcgd.odoo" --link pg93:db xcgd/odoo:7.0 start
+* Download the odoo.conf from this repo and places it as /etc/odoo-default.conf.
+* Download the nightly build tar from http://nightly.odoo.com/, untar it, chown it and place it where it should be.
+* Add the volumes.
+* Add the boot.sh file and set it as the entrypoint
+* Expose propper ports (8069 by default)
 
+**I encourage you to customize this Dockerfile as you see fit**. You could get odoo from the git repo instead of the nightly build or not get them at all. _The sky is the limit_
 
-WARNING: note that we aliased the PostgreSQL as ``db``. This is ARBITRARY since we use this alias in the configuration files.
+Run Odoo
+========
 
-If docker starts without issues, just open your favorite browser and point it to http://localhost:8069	
+Assuming that you have your postgres container running with some name (`pg` as default) you can issue `run_odoo.sh` which will take care of the heavy lifting for you but in short it:
 
-The default admin password is somesuperstrongadminpasswdYOUNEEDTOCHANGEBEFORERUNNING
+* Connects the port 80 on the local machine to the port 8069 on the container.
+* Sets volumes: you can choose not to set any volumes the image has everything it need by default and should run fine, this is mainly for extending it without having to build the image again. There are three variables and they should be set to absolute paths on the local machine:
+    * `YOUR_ODOO_FOLDER`:  Sets the odoo root folder. In case you don't want to use the nightly builds or you want to use a newer version.
+    * `YOUR_ODOO_CONFIG_FILE`: Sets the odoo config file. In case you want to use a custom config file. Note that you should be carefull with this since it can make odoo behave weirdly in many ways. Also because of reasons you CAN'T edit this file once the container has launched.
+    * `YOUR_ODOO_ADDITIONAL_ADDONS`: Sets an additional addons folder. Mainly for testing. Note that you must reset odoo to notice the changes and also note that this folder is synced automagically and both the container and the host can modify it.
+* Links the container to `pg` which should be the postgres database.
+* Names the new container `odoo`
 
-If you want to change the odoo configuration with you own file you can do so easily like so: 
+If docker starts without issues, just open your favorite browser and point it to http://localhost/
 
-    # let's pretend your configuration is located under /opt/odoo/instance1/etc/ on your host machine, you can run it by
-
-    $ docker run --name="xcgd.odoo" -v /opt/odoo/instance1/etc:/opt/odoo/etc -p 8069:8069 --link pg93:db -d xcgd/odoo start
-
-
-Security Notes
-==============
-
-You'll note that we did not open ports to the outside world on the PostgreSQL container. This is for security reasons, NEVER RUN your PostgreSQL container with ports open to the outside world... Just link the openerp container to it as we did above.
-
-This is really important to understand. PostgreSQL is configured to trust everyone so better keep it firewalled. And before yelling madness please consider this: If someone gains access to your host and is able to launch a container and open a port for himself he's got your data anyways... he's on your machine. So keep that port closed and secure your host. You database is as safe as your host is, no more.
-
-
-  [1]: https://registry.hub.docker.com/u/xcgd/postgresql/
-
+The default admin password is `password`
