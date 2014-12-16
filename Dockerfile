@@ -15,7 +15,7 @@ USER odoo
 
 # Execution environment
 WORKDIR /opt/odoo
-VOLUME ["/opt/odoo", "/etc/odoo.conf", "/additionnal_addons"]
+VOLUME ["/opt/odoo", "/etc/odoo.conf", "/additional_addons"]
 
 # Set the default entrypoint (non overridable) to run when starting the container
 USER 0
