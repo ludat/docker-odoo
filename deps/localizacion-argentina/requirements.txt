@@ -1,0 +1,2 @@
+beautifulsoup
+geopy>=0.94

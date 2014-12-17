@@ -37,7 +37,7 @@ function start {
     fi
 
     chown odoo:odoo /etc/odoo.conf
-    sudo -i -u odoo /usr/bin/python \
+    sudo -i -u odoo python \
                     /opt/odoo/openerp-server \
                     -c $CONFIG_FILE \
                     $* &
