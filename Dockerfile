@@ -5,7 +5,7 @@ MAINTAINER lucas6246@gmail.com
 ADD https://raw.githubusercontent.com/ludat/docker-odoo/master/sources/odoo.conf /etc/odoo-default.conf
 ADD http://nightly.odoo.com/8.0/nightly/src/odoo_8.0.latest.tar.gz /opt/odoo.tar.gz
 RUN tar xzvf /opt/odoo.tar.gz -C /opt/ && \
-    mv -v /opt/odoo-*/* /opt/odoo/ && \
+    cp -v -r /opt/odoo-*/* /opt/odoo/ && \
     rm -v -r /opt/odoo.tar.gz /opt/odoo-*
 RUN chown -R odoo:odoo /opt /etc/odoo-default.conf
 
