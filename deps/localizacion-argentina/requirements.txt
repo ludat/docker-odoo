@@ -1,2 +1,9 @@
-beautifulsoup
-geopy>=0.94
+genshi==0.6.1
+http://launchpad.net/aeroolib/trunk/1.0.0/+download/aeroolib.tar.gz
+BeautifulSoup
+geopy==0.95.1
+odfpy
+werkzeug==0.8.3
+http
+pyPdf
+xlrd
