@@ -3,7 +3,7 @@
 Tags:
 =====
 
-* [`8.0` (8.0/_Dockerfile_)](https://github.com/ludat/docker-odoo/blob/master/base/Dockerfile)
+* [`8.0` (8.0/_Dockerfile_)](https://github.com/ludat/docker-odoo/blob/master/deps/Dockerfile)
 
 Useless Odoo base dependency images
 ===================================
