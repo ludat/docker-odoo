@@ -1,4 +1,4 @@
-FROM ludat/odoo-base:8.0
+FROM ludat/odoo-deps:8.0
 MAINTAINER lucas6246@gmail.com
 
 # Set up overridable defaults
