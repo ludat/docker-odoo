@@ -1,4 +1,4 @@
-FROM ludat/odoo-deps:8.0
+FROM ludat/odoo-deps:7.0
 MAINTAINER lucas6246@gmail.com
 
 # Maybe someday I'll need this

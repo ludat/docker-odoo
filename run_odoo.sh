@@ -18,7 +18,7 @@ if [ -n "$YOUR_ODOO_ADDITIONAL_ADDONS" ]; then
     VOLUMES="$VOLUMES -v $YOUR_ODOO_ADDITIONAL_ADDONS:/additional_addons ";
 fi
 
-# this is what starts your ERP server with odoo version 8.0
+# this is what starts your ERP server with odoo version 7.0
 docker run --rm -p 80:8069 --name odoo --link pg:db \
     $VOLUMES \
     ludat/odoo start

@@ -1,7 +1,8 @@
 Tags:
 =====
 
-* [`8.0` (8.0/_Dockerfile_)](https://github.com/ludat/docker-odoo/blob/master/deps/localizacion-argentina/Dockerfile)
+* [`7.0` (7.0/_Dockerfile_)](https://github.com/ludat/docker-odoo/blob/7.0/deps/localizacion-argentina/Dockerfile)
+* [`8.0` (8.0/_Dockerfile_)](https://github.com/ludat/docker-odoo/blob/8.0/deps/localizacion-argentina/Dockerfile)
 
 **NOTE**: There is no `latest` because explicit is better that implicit
 

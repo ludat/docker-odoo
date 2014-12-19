@@ -1,9 +1,9 @@
-FROM ludat/odoo-deps:8.0
+FROM ludat/odoo-deps:7.0
 MAINTAINER lucas6246@gmail.com
 
 # Set up overridable defaults
-ADD https://raw.githubusercontent.com/ludat/docker-odoo/master/sources/odoo.conf /etc/odoo-default.conf
-ADD http://nightly.odoo.com/8.0/nightly/src/odoo_8.0.latest.tar.gz /opt/odoo.tar.gz
+ADD https://raw.githubusercontent.com/ludat/docker-odoo/7.0/sources/odoo.conf /etc/odoo-default.conf
+ADD http://nightly.odoo.com/7.0/nightly/src/odoo_7.0.latest.tar.gz /opt/odoo.tar.gz
 RUN tar xzvf /opt/odoo.tar.gz -C /opt/ && \
     cp -v -r /opt/odoo-*/* /opt/odoo/ && \
     rm -v -r /opt/odoo.tar.gz /opt/odoo-*
