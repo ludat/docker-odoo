@@ -5,6 +5,8 @@ Tags:
 
 * [`8.0` (8.0/_Dockerfile_)](https://github.com/ludat/docker-odoo/blob/master/deps/Dockerfile)
 
+**NOTE**: There is no `latest` because explicit is better that implicit
+
 Useless Odoo base dependency images
 ===================================
 
